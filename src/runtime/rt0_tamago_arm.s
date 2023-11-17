@@ -5,6 +5,7 @@
 #include "textflag.h"
 
 TEXT _rt0_arm_tamago(SB),NOSPLIT,$0
+	//B	runtime·rt0_arm_tamago(SB)
 	// Detect HYP mode and switch to SVC if necessary
 	WORD	$0xe10f0000	// mrs r0, CPSR
 	AND	$0x1f, R0, R0	// get processor mode
@@ -30,6 +31,8 @@ runtime_start:
 	MOVW	runtime·ramStart(SB), R13
 	MOVW	runtime·ramSize(SB), R1
 	MOVW	runtime·ramStackOffset(SB), R2
+	MOVW	$0x1F600000, R1 // $0x20000000-$0xa00000, R1
+	MOVW	$0x100, R2
 	ADD	R1, R13
 	SUB	R2, R13
 	B	runtime·rt0_arm_tamago(SB)
